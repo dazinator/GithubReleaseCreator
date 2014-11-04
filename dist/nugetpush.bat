@@ -1,0 +1,1 @@
+..\lib\NuGet.CommandLine.2.8.3\tools\NuGet.exe push *.nupkg
