@@ -2,25 +2,23 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>GithubReleaseCreator</id>
-    <version>$version$</version>
+    <version>1.0.3</version>
     <title>Github Release Creator</title>
     <description>A small and flexible command line utility, that can create releases on GitHub, including setting the release notes, and uploading file assets.</description>
     <authors>Darrell Tunnell</authors>
     <owners>Darrell Tunnell</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <language>en-gb</language>
-    <projectUrl>http://dazinator.github.io/CrmAdo/</projectUrl>
+    <projectUrl>https://github.com/dazinator/GithubReleaseCreator/</projectUrl>
     <copyright>Copyright � Darrell Tunnell 2014</copyright>
     <releaseNotes>
-     Initial Release.
+     Corrected nuspec file.
     </releaseNotes>
-    <tags>GitHub Git Release API Build Deploy</tags>
-    <dependencies>
-      <dependency id="CommandLineParser" version="1.9.71" />   
-      <dependency id="RestSharp" version="105.0.0" />     
-    </dependencies>
+    <tags>GitHub Git Release API Build Deploy</tags>    
   </metadata>
   <files>
-    <file src="bin\Release\GithubReleaseCreator.exe" target="tools\GithubReleaseCreator.exe" />   
+    <file src="bin\Release\GithubReleaseCreator.exe" target="tools\GithubReleaseCreator.exe" />
+    <file src="bin\Release\CommandLine.dll" target="tools\CommandLine.dll" />
+    <file src="bin\Release\RestSharp.dll" target="tools\RestSharp.dll" />
   </files>
 </package>
