@@ -46,7 +46,7 @@ namespace GithubReleaseCreator
         [Option('v', "verbose", HelpText = "Enable verbose output to the console during execution.")]
         public bool Verbose { get; set; }
 
-        [OptionList('u', "uploadfiles", Separator = ',', HelpText = "Upload one or more files as assets against the release. To specify more than one file, delimate the filenames with a comma. For example: c:/myfile.txt,c:/myotherfile.txt")]
+        [OptionList('a', "assetfiles", Separator = ',', HelpText = "Upload one or more files as assets against the release. To specify more than one file, seperate the filenames with a comma. For example: c:/myfile.txt,c:/myotherfile.txt")]
         public IList<string> ReleaseAssetFiles { get; set; }
 
         [HelpOption]
