@@ -1,7 +1,8 @@
 GithubReleaseCreator
 ====================
 
-A small and flexible command line utility, that can create releases on GitHub, including setting the release notes, and uploading file assets.
+A small and flexible command line utility, that can create releases on GitHub, including setting the release notes. 
+Uploading files as assets against the release is in the works.
 
 Available as a NuGet package here: https://www.nuget.org/packages/GithubReleaseCreator/ - just add it to your solution and then you can call it easily during builds etc.
 
@@ -23,5 +24,5 @@ Arguments explained:
 5. --name : the name to give the release.
 6. --desc : Optional. The description of the release. Can be markdown format.
 7. --draft : Optional. Flags the release as a draft.
-8. -u : Optional. Allows you to specify one or more (comma seperated) files to be uploaded as assets against the release that is created.
+8. -a : Optional. Allows you to specify one or more (comma seperated) files to be uploaded as assets against the release that is created.
 
