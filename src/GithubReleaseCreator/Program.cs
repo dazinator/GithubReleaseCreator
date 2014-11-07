@@ -1,4 +1,5 @@
 ﻿using CommandLine;
+using Newtonsoft.Json;
 using RestSharp;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace GithubReleaseCreator
     /// This program allows you to create a release on GitHub via command line.
     /// </summary>
     class Program
-    {           
+    {
 
         static void Main(string[] args)
         {
@@ -25,7 +26,7 @@ namespace GithubReleaseCreator
         }
 
         private static void CreateRelease(CreateReleaseOptions options)
-        {         
+        {
 
             var logger = new Logger(options.Verbose);
             logger.LogVerbose("Creating release on GitHub..");
@@ -70,7 +71,7 @@ namespace GithubReleaseCreator
             request.AddParameter("application/json; charset=utf-8", releaseJson, ParameterType.RequestBody);
 
             logger.LogVerbose("Sending Request..");
-            var response = client.Execute(request);         
+            var response = client.Execute(request);
 
             logger.LogVerbose(response.Content);
             if (response.StatusCode != System.Net.HttpStatusCode.Created)
@@ -78,14 +79,50 @@ namespace GithubReleaseCreator
                 logger.LogError("Error occurred creating release.");
                 logger.LogVerbose("Response content follows:");
                 logger.LogVerbose(response.Content);
+
                 throw new Exception("Error occurred creating release.");
             }
-            else
+
+            logger.LogVerbose("Release created succesfully!");
+
+            // If we have asset files t upload then get the release id;
+            if (options.ReleaseAssetFiles != null && options.ReleaseAssetFiles.Any())
             {
-                logger.LogVerbose("Release created succesfully!");
+                // Get the response.
+                Dictionary<string, string> values = JsonConvert.DeserializeObject<Dictionary<string, string>>(response.Content);
+                string releaseIdString = values["id"];
+                int releaseId = 0;
+                if (!int.TryParse(releaseIdString, out releaseId))
+                {
+                    logger.LogVerbose("Unable to parse release id from response: " + releaseIdString);
+                }
+
+                logger.LogVerbose("Release id is " + releaseId);
+
+                foreach (var assetFile in options.ReleaseAssetFiles)
+                {
+                    UploadReleaseAsset(releaseId, assetFile);
+                }
+
 
             }
-        }  
+
+
+        }
+
+        private static void UploadReleaseAsset(int releaseId, string assetFile)
+        {
+            throw new NotImplementedException();
+
+            // POST https://uploads.github.com/repos/:owner/:repo/releases/:id/assets?name=foo.zip
+
+            // The raw file is uploaded to GitHub. Set the content type appropriately, and the asset’s name in a URI query parameter.
+
+            //            Content-Type	string	Required. The content type of the asset. This should be set in the Header. Example: "application/zip". For a list of acceptable types, refer this list of common media types.
+            //name	string	Required. The file name of the asset. This should be set in the URI query parameter.
+
+            // Send the raw binary content of the asset as the request body.
+        }
 
     }
 }
