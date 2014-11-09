@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>GithubReleaseCreator</id>
-    <version>1.0.4</version>
+    <version>1.0.5</version>
     <title>Github Release Creator</title>
     <description>A small and flexible command line utility, that can create releases on GitHub, including setting the release notes, and uploading file assets.</description>
     <authors>Darrell Tunnell</authors>
@@ -20,5 +20,6 @@
     <file src="bin\Release\GithubReleaseCreator.exe" target="tools\GithubReleaseCreator.exe" />
     <file src="bin\Release\CommandLine.dll" target="tools\CommandLine.dll" />
     <file src="bin\Release\RestSharp.dll" target="tools\RestSharp.dll" />
+    <file src="bin\Release\Newtonsoft.Json.dll" target="tools\Newtonsoft.Json.dll" />    
   </files>
 </package>
