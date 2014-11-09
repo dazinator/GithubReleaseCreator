@@ -1,12 +1,16 @@
 ﻿using CommandLine;
+using GithubReleaseCreator.Dto;
 using Newtonsoft.Json;
 using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace GithubReleaseCreator
 {
@@ -29,7 +33,6 @@ namespace GithubReleaseCreator
         {
 
             var logger = new Logger(options.Verbose);
-            logger.LogVerbose("Creating release on GitHub..");
 
             string username = options.Username;
             string password = options.Password;
@@ -38,11 +41,14 @@ namespace GithubReleaseCreator
             string tagName = options.TagName;
             string releaseName = options.ReleaseName;
 
+            logger.Log("Creating GitHub release: " + options.ReleaseName + " for repo: " + options.RepoName + " and tag: " + options.TagName);
+
             string description = options.Description;
             if (!string.IsNullOrWhiteSpace(options.DescriptionFile))
             {
                 logger.LogVerbose("Reading release description from file: " + options.DescriptionFile);
                 description = System.IO.File.ReadAllText(options.DescriptionFile);
+                description = HttpUtility.JavaScriptStringEncode(description);
             }
 
             bool draft = options.Draft;
@@ -83,46 +89,79 @@ namespace GithubReleaseCreator
                 throw new Exception("Error occurred creating release.");
             }
 
-            logger.LogVerbose("Release created succesfully!");
+            ReleaseDto release = JsonConvert.DeserializeObject<ReleaseDto>(response.Content);
+            int releaseId = release.id;
+            logger.Log("Successfully created release (id: " + releaseId + ")");
 
             // If we have asset files t upload then get the release id;
             if (options.ReleaseAssetFiles != null && options.ReleaseAssetFiles.Any())
             {
-                // Get the response.
-                Dictionary<string, string> values = JsonConvert.DeserializeObject<Dictionary<string, string>>(response.Content);
-                string releaseIdString = values["id"];
-                int releaseId = 0;
-                if (!int.TryParse(releaseIdString, out releaseId))
-                {
-                    logger.LogVerbose("Unable to parse release id from response: " + releaseIdString);
-                }
-
-                logger.LogVerbose("Release id is " + releaseId);
-
                 foreach (var assetFile in options.ReleaseAssetFiles)
                 {
-                    UploadReleaseAsset(releaseId, assetFile);
+                    UploadReleaseAsset(logger, client, options, releaseId, assetFile);
+                }
+            }
+
+        }
+
+        private static void UploadReleaseAsset(Logger logger, RestClient client, CreateReleaseOptions options, int releaseId, string assetFile)
+        {
+            // throw new NotImplementedException();
+            var fileName = System.IO.Path.GetFileName(assetFile);
+            string resource = string.Format("/repos/{0}/{1}/releases/{2}/assets?name={3}", options.Owner, options.RepoName, releaseId, fileName);
+            var credential = new System.Net.NetworkCredential(options.Username, options.Password);
+            var authHeader = string.Format(CultureInfo.InvariantCulture, "Basic {0}", Convert.ToBase64String(Encoding.UTF8.GetBytes(string.Format(CultureInfo.InvariantCulture, "{0}:{1}", credential.UserName, credential.Password))));
+            var mimeType = System.Web.MimeMapping.GetMimeMapping(fileName);
+
+            logger.Log("Creating github release asset: " + fileName);
+
+            logger.LogVerbose("Reading bytes from file: " + assetFile);
+            var bytes = System.IO.File.ReadAllBytes(assetFile);
+
+            HttpWebRequest request = (HttpWebRequest)(HttpWebRequest.Create(string.Format("https://uploads.github.com{0}", resource)));
+            request.Credentials = credential;
+            request.Headers.Add("Authorization", authHeader);
+            request.UserAgent = "GithubReleaseCreator";
+
+            request.ContentType = mimeType;
+            request.ContentLength = bytes.Length;
+
+            request.Method = "POST";
+         
+            logger.LogVerbose("Content Type is: " + mimeType);
+            logger.LogVerbose("Uploading file data..");
+            using (var dataStream = request.GetRequestStream())
+            {
+                dataStream.Write(bytes, 0, bytes.Length);
+                dataStream.Close();
+            }
+
+            // Get the response.
+            logger.LogVerbose("Getting response..");
+            using (var response = request.GetResponse())
+            {
+                // WebResponse response = ;
+                var httpResp = (HttpWebResponse)response;
+                if (httpResp.StatusCode != HttpStatusCode.Created)
+                {
+                    logger.LogError("Error occurred uploading release asset. Expected HttpStatusCode.Created but server returned: " + httpResp.StatusCode);
+                    logger.LogVerbose("Response content follows:");
+                    using (StreamReader reader = new StreamReader(httpResp.GetResponseStream()))
+                    {
+                        string responseFromServer = reader.ReadToEnd();
+                        logger.LogVerbose(responseFromServer);
+                    }
+                    throw new Exception("Error occurred creating release.");
                 }
 
+                logger.Log("Release asset successfully created: " + fileName);
 
             }
 
-
         }
 
-        private static void UploadReleaseAsset(int releaseId, string assetFile)
-        {
-            throw new NotImplementedException();
 
-            // POST https://uploads.github.com/repos/:owner/:repo/releases/:id/assets?name=foo.zip
 
-            // The raw file is uploaded to GitHub. Set the content type appropriately, and the asset’s name in a URI query parameter.
-
-            //            Content-Type	string	Required. The content type of the asset. This should be set in the Header. Example: "application/zip". For a list of acceptable types, refer this list of common media types.
-            //name	string	Required. The file name of the asset. This should be set in the URI query parameter.
-
-            // Send the raw binary content of the asset as the request body.
-        }
 
     }
 }
