@@ -1,21 +1,22 @@
 GithubReleaseCreator
 ====================
 
-A small and flexible command line utility, that can create releases on GitHub, including setting the release notes, and
-uploading release assets such as .msi files or any other type of file that GitHub supports.
+A small and flexible command line utility, that can create releases on GitHub, and can also upload any release assets you may have against that release, such as .msi files for example (or other types of files that GitHub supports).
 
 Available as a NuGet package here: https://www.nuget.org/packages/GithubReleaseCreator/ - just add it to your solution and then you can call it easily during builds via the command line etc.
 
 # Sample
 
-
 On your GitHub account page, *create yourself a Personal Access Token*.
+
+The following demonstrates calling `GithubReleaseCreator.exe` from windows command prompt, to create a release on GitHub for this repository.
 
 ```shell
 GithubReleaseCreator.exe --username [Put Personal Access Token Here] --owner "dazinator"
 --repo "githubreleasecreator" --tag "1.0.0+1" --name "TestRelease" --desc "Testing my automated release"
 --draft -assetfiles myfile.txt,myotherfile.txt -verbose
 ```
+
 # Arguments
 
 * `--username` : used to authenticate with GitHub API - this should be your personal access token.
