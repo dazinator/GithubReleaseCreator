@@ -13,7 +13,7 @@ The following demonstrates calling `GithubReleaseCreator.exe` from windows comma
 
 ```shell
 GithubReleaseCreator.exe --username [Put Personal Access Token Here] --owner "dazinator"
---repo "githubreleasecreator" --tag "1.0.0+1" --name "TestRelease" --desc "Testing my automated release"
+--repo "githubreleasecreator" --tag "1.1.0" --name "TestRelease" --desc "Testing my automated release"
 --draft -assetfiles "myfile.txt,myotherfile.txt" -verbose
 ```
 
