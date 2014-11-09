@@ -26,8 +26,10 @@ GithubReleaseCreator.exe --username [Put Personal Access Token Here] --owner "da
 6. `--desc` : Optional. The description of the release. Can be markdown format.
 7. `--filedesc` : Optional. You can use this instead of the --desc argument. The value of the argument should be the path of a file containing the description for the release. This allows you to keep the description in a nicely formatted file (perhaps markdown format for example).
 8. `--draft` : Optional. Flags the release as a draft.
-9. `-assetfiles` : Optional. Allows you to specify one or more (comma seperated) files to be uploaded as assets against the release that is created.
-10. `-verbose` : Optional. If specified, enables output of verbose log messages. Useful if hitting issues.
+9. `--pre` : Optional. Flags the release as a pre-release.
+10. `--assetfiles` : Optional. Allows you to specify one or more (comma seperated) files to be uploaded as assets against the release that is created.
+11. `--commitish` : Optional. The target commit-ish to create the release for. Default is 'master'
+12. `--verbose` : Optional. If specified, enables output of verbose log messages. Useful if hitting issues.
 
 
 
