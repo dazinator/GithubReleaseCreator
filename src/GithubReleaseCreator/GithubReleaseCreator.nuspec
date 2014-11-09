@@ -11,7 +11,7 @@
     <language>en-gb</language>
     <projectUrl>https://github.com/dazinator/GithubReleaseCreator/</projectUrl>
     <copyright>Copyright � Darrell Tunnell 2014</copyright>
-    <releaseNotes>Added the ability to upload release assets against the GutHub release, as mentioned here: https://github.com/dazinator/GithubReleaseCreator/issues/1 </releaseNotes>
+    <releaseNotes>Added the ability to upload release assets against the GitHub release, as mentioned here: https://github.com/dazinator/GithubReleaseCreator/issues/1 </releaseNotes>
     <tags>GitHub Git Release API Build Deploy</tags>    
   </metadata>
   <files>
