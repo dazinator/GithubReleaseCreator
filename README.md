@@ -14,7 +14,7 @@ On your GitHub account page, *create yourself a Personal Access Token*.
 ```shell
 GithubReleaseCreator.exe --username [Put Personal Access Token Here] --owner "dazinator"
 --repo "githubreleasecreator" --tag "1.0.0+1" --name "TestRelease" --desc "Testing my automated release"
---draft -a myfile.txt,myotherfile.txt -v
+--draft -assetfiles myfile.txt,myotherfile.txt -verbose
 ```
 # Arguments
 
@@ -26,7 +26,8 @@ GithubReleaseCreator.exe --username [Put Personal Access Token Here] --owner "da
 6. `--desc` : Optional. The description of the release. Can be markdown format.
 7. `--filedesc` : Optional. You can use this instead of the --desc argument. The value of the argument should be the path of a file containing the description for the release. This allows you to keep the description in a nicely formatted file (perhaps markdown format for example).
 8. `--draft` : Optional. Flags the release as a draft.
-9. `-a` : Optional. Allows you to specify one or more (comma seperated) files to be uploaded as assets against the release that is created.
+9. `-assetfiles` : Optional. Allows you to specify one or more (comma seperated) files to be uploaded as assets against the release that is created.
+10. `-verbose` : Optional. If specified, enables output of verbose log messages. Useful if hitting issues.
 
 
 
