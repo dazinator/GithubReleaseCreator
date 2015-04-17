@@ -5,6 +5,8 @@ A small and flexible command line utility, that can create releases on GitHub, a
 
 Available as a NuGet package here: https://www.nuget.org/packages/GithubReleaseCreator/ - just add it to your solution and then you can call it easily during builds via the command line etc.
 
+**UPDATE: This tool is now considered feature complete, and development has ceased as it fulfills it's original purpose. I highly advise you check out the more feature rich tool here: https://github.com/GitTools/GitHubReleaseManager**
+
 # Example
 
 On your GitHub account page, *create yourself a Personal Access Token*.
