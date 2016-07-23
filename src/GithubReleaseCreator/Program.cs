@@ -20,16 +20,26 @@ namespace GithubReleaseCreator
     class Program
     {
 
-        static void Main(string[] args)
+        static int Main(string[] args)
         {
             var options = new CreateReleaseOptions();
             if (CommandLine.Parser.Default.ParseArguments(args, options))
             {
-                CreateRelease(options);
+                try
+                {
+                     return CreateRelease(options);
+                }
+                     catch (Exception)
+                {
+                     return 1;
+                }
+                
             }
+            
+            return 1;
         }
 
-        private static void CreateRelease(CreateReleaseOptions options)
+        private static int CreateRelease(CreateReleaseOptions options)
         {
 
             var logger = new Logger(options.Verbose);
@@ -102,6 +112,7 @@ namespace GithubReleaseCreator
                 }
             }
 
+            return 0;
         }
 
         private static void UploadReleaseAsset(Logger logger, RestClient client, CreateReleaseOptions options, int releaseId, string assetFile)
